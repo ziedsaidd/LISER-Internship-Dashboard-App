@@ -1,7 +1,9 @@
-#create dataframes based on the available data
-import os
-import geopandas as gpd
+# create dataframes based on the available data
 import json
+import os
+
+import geopandas as gpd
+import pandas as pd
 import rasterio
 import rasterstats
 import pandas as pd
@@ -30,8 +32,9 @@ def generate_dataframe (shapefile, raster):
     polluant = rf.read(1)
     affine = rf.transform
 
-    # Calculating the zonal statistics 
-    avg_pl  = rasterstats.zonal_stats(districts, polluant, affine = affine,stats = ['mean', 'min', 'max', 'std'],geojson_out = True)
+    # Calculating the zonal statistics
+    avg_pl = rasterstats.zonal_stats(districts, polluant, affine=affine, stats=[
+                                     'mean', 'min', 'max', 'std'], geojson_out=True)
 
     # Extracting the average rainfall data from the list
     avg_poll = []
@@ -39,15 +42,14 @@ def generate_dataframe (shapefile, raster):
 
     while i < len(avg_pl):
         avg_poll.append(avg_pl[i]['properties'])
-        i = i + 1 
+        i = i + 1
 
     # Transfering the infromation from the list to a pandas DataFrame
-
     avg_pl_gr = pd.DataFrame(avg_poll)
-    districts["mean"]=avg_pl_gr["mean"]
-    districts["min"]=avg_pl_gr["min"]
-    districts["max"]=avg_pl_gr["max"]
-    districts["std"]=avg_pl_gr["std"]
+    districts["mean"] = avg_pl_gr["mean"]
+    districts["min"] = avg_pl_gr["min"]
+    districts["max"] = avg_pl_gr["max"]
+    districts["std"] = avg_pl_gr["std"]
 
     dataframe = districts
 
