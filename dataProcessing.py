@@ -17,7 +17,7 @@ def generate_dataframe(shapefile, raster):
 
     # convert it into a geoJson file
     districts.to_file("geoDist", driver="GeoJSON")
-    with open("geoDist") as geofile:
+    with open("geoDist", encoding="Latin-1") as geofile:
         geojson_layer = json.load(geofile)
 
     # concordance between the df and the geojson file based on an 'id' key

@@ -154,7 +154,7 @@ app.layout = html.Div(
         ], style={'display': 'inline-block', 'width': '49%'}), ])
 
 
-with open("geoDist") as geofile:
+with open("geoDist", encoding="Latin-1") as geofile:
     geojson_layer = json.load(geofile)
 
 for feature in geojson_layer['features']:
