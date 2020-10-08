@@ -694,7 +694,7 @@ else:
 
 try:
     if (elapsed1>3 or elapsed2>3 or elapsed3>3 or elapsed4>4):
-        print("I am updating big files")
+        print("I am updating big files.")
         createBigFile(path)
 except:
     pass
