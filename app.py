@@ -197,4 +197,5 @@ def update_graph(reg, poll, nut, y, m, s):
     
 
 if __name__ == '__main__':
-    app.run_server(debug=False, use_reloader=False)
+    server = app.server
+    #app.run_server(debug=False, use_reloader=False)
