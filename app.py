@@ -20,6 +20,7 @@ import time
 
 # App layout
 app = dash.Dash(__name__)
+server = app.server
 app.layout = html.Div(
         [
         # header
@@ -147,11 +148,11 @@ app.layout = html.Div(
             12: 'December'}), style={'width': '100%', 'padding': '0px 20px 20px 20px'}),
 
         html.Div([
-            dcc.Graph(id='x-time-series'),
+            dcc.Graph(id='poll-time-series'),
             ], style={'display': 'inline-block', 'width': '49%'}),
 
         html.Div([
-            dcc.Graph(id='y-time-series'),
+            dcc.Graph(id='COVID-time-series'),
             ], style={'display': 'inline-block', 'width': '49%'}),])])
 
 
@@ -195,7 +196,51 @@ def update_graph(reg, poll, nut, y, m, s):
     print (done2-done1, done1-start1)
     return [fig]
     
+def create_time_series(dff, title, poll, stat):
+    fig = px.scatter(dff, x='date', y='{}'.format(stat))
+    fig.update_traces(mode='lines+markers')
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(type='linear')
+    fig.add_annotation(x=0, y=0.85, xanchor='left', yanchor='bottom',
+                       xref='paper', yref='paper', showarrow=False, align='left',
+                       bgcolor='rgba(255, 255, 255, 0.5)', text=title)
+    fig.update_layout(height=225, margin={'l': 20, 'b': 30, 'r': 10, 't': 10})
+    return [fig]
+
+def create_COVID_time_series(dff, title):
+    fig = px.scatter(dff, x='date', y='COVID Cases')
+    fig.update_traces(mode='lines+markers')
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(type='linear')
+    fig.add_annotation(x=0, y=0.85, xanchor='left', yanchor='bottom',
+                       xref='paper', yref='paper', showarrow=False, align='left',
+                       bgcolor='rgba(255, 255, 255, 0.5)', text=title)
+    fig.update_layout(height=225, margin={'l': 20, 'b': 30, 'r': 10, 't': 10})
+    return [fig]
+
+
+@app.callback(
+    [Output('poll-time-series', 'figure')],
+    [Input('pollution_map', 'hoverData'),
+     Input('Polluant', 'value'),
+     Input('stats','value')])
+def update_poll_timeseries(hoverData, poll, stat):
+    country_name = hoverData['points'][0]['location']
+    dff = gdf[gdf['id'] == country_name]
+    dff = dff[dff['polluant'] == poll]
+    title = '<b>{} {} pollution data</b>'.format(country_name, poll)
+    return create_time_series(dff, title, poll, stat)
+
+@app.callback(
+    [Output('COVID-time-series', 'figure')],
+    [Input('pollution_map', 'hoverData')])
+def update_poll_timeseries(hoverData):
+    country_name = hoverData['points'][0]['location']
+    dff = gdf[gdf['id'] == country_name]
+    title = '<b>{} COVID Cases data</b>'.format(country_name)
+    return create_COVID_time_series(dff, title)
+
 
 if __name__ == '__main__':
-    server = app.server
-    #app.run_server(debug=False, use_reloader=False)
+    #app.server.run(debug=True)
+    app.run_server(debug=True)

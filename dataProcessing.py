@@ -7,24 +7,18 @@ import rasterio
 import rasterstats
 import time
 
-def generate_dataframe(shapefile, raster):
-    
+def generate_dataframe(shapefile, raster):   
     # Read the shapefile and convert its crs
-    print("I am here")
     districts = gpd.read_file(shapefile)
     s = shapefile.split("/")
-    print(s)
-    print(s[6])
     e = s[6].split("_")
     nuts = e[1].split(".")[0]
     reg = e[0]
-    print("I am here222")
  #  districts.drop(["GEN"], axis=1)
  #  districts["GEN"]= districts["POPULATION"]
     districts = districts.to_crs('epsg:4326')
     # convert it into a geoJson file
     districts.to_file("./data/geojsonFiles/geojson_{}_{}".format(reg, nuts), driver="GeoJSON")
-    print("hani fil generate")
     with open("./data/geojsonFiles/geojson_{}_{}".format(reg, nuts)) as geofile:   
         geojson_layer = json.load(geofile)
     # concordance between the df and the geojson file based on an 'id' key
@@ -32,7 +26,6 @@ def generate_dataframe(shapefile, raster):
     for feature in geojson_layer['features']:
         feature['id'] = feature['properties']['GEN']
         state_id_map[feature['properties']['SHN']] = feature['id']
-    print("hani ba3d generate")
     districts['id'] = districts['SHN'].apply(lambda x: state_id_map[x])
     # import the raster file
     rf = rasterio.open(raster, mode='r')
@@ -572,11 +565,10 @@ def check_new_nuts(path):
                 
                 for i in new3:
                     if ".shp" in i:
-                        #try:
-                        generate_from_nuts("nuts3", path, zone, i)                              
-                        #except:
-                        print("te7chè")
-                        #    pass
+                        try:
+                            generate_from_nuts("nuts3", path, zone, i)                              
+                        except:
+                            pass
                         lis3 = lis3 + new3
                         liste3 = pd.DataFrame(lis3)
                         liste3.to_excel(
