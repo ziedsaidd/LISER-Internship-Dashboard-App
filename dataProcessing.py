@@ -57,7 +57,10 @@ def generate_dataframe(shapefile, raster):
     districts["std"] = avg_pl_gr["std"]
     districts ["nuts"] = nuts
     districts ["zone"] = reg
-    del districts["geometry"]
+    try:
+        del districts["geometry"]
+    except:
+        pass
     try:
         del districts["perimeter"]
         del districts["area"]
@@ -74,6 +77,8 @@ def generate_dataframe(shapefile, raster):
         del districts["eur"]
         del districts["isn"]
         del districts["shn_txt"]
+    except:
+        pass
 
     return districts, geojson_layer
 

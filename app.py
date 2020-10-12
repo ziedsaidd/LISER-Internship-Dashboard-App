@@ -144,11 +144,11 @@ app.layout = html.Div(
 
         html.Div([
             dcc.Graph(id='poll-time-series'),
-            ], style={'display': 'inline-block', 'width': '49%'}),
+            ], style={'display': 'inline-block', 'width': '49%', 'margin': '0 auto'}),
 
         html.Div([
             dcc.Graph(id='COVID-time-series'),
-            ], style={'display': 'inline-block', 'width': '49%'}),])])
+            ], style={'display': 'inline-block', 'width': '49%', 'margin': '0 auto'}),])])
 
 @app.callback(
 [Output(component_id='pollution_map', component_property='figure')],
@@ -229,5 +229,5 @@ def update_covid_timeseries(hoverData):
 
 
 if __name__ == '__main__':
-    #app.server.run(debug=True)
-    app.run_server(debug=True)
+    app.server.run(debug=True)
+    #app.run_server(debug=True)
