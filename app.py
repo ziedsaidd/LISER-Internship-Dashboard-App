@@ -16,9 +16,11 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 import json
 import time
-
-
+#Read the data file processed by dataProcessing.py
+gdf = pd.read_excel('./data/fileToLoad/allData.xlsx')
 # App layout
+fig = px.choropleth_mapbox(mapbox_style="open-street-map",center = {"lat": 49.611621, "lon": 6.1319346})
+#
 app = dash.Dash(__name__)
 server = app.server
 app.layout = html.Div(
@@ -37,7 +39,6 @@ app.layout = html.Div(
         
         
         html.Div([
-
         html.Div([
             dcc.Dropdown(
                 id='Country',
@@ -47,8 +48,6 @@ app.layout = html.Div(
                      {"label": "France", "value": 'france'},
                      {"label": "Europe", "value": 'europe'},
                      {"label": "USA", "value": 'usa'}],
-                #value='Greater Region',
-                #placeholder="Select a country or a region"
                 value = "greaterRegion" 
             ),
             dcc.Dropdown(
@@ -58,8 +57,6 @@ app.layout = html.Div(
                      {"label": "SO2", "value": 'so2'},
                      {"label": "O3", "value": 'o3'},
                      {"label": "CO", "value": 'co'}],
-                #value='NO2',
-                #placeholder="Select a polluant"
                 value = "no2"
             ),
             dcc.Dropdown(
@@ -69,7 +66,6 @@ app.layout = html.Div(
                      {"label": "Region", "value": 'nuts2'},
                      {"label": "Departement", "value": 'nuts3'}],
                 value='nuts3',
-                #placeholder="Select the Nuts level"
             ),
             dcc.Dropdown(
                 id='Year',
@@ -77,7 +73,6 @@ app.layout = html.Div(
                      {"label": "2019", "value": 2019},
                      {"label": "2020", "value": 2020}],
                 value=2019,
-                #placeholder="Select the year"
             ),
             dcc.Dropdown(
                 id='stats',
@@ -86,46 +81,46 @@ app.layout = html.Div(
                      {"label": "minimum value", "value": 'min'},
                      {"label": "maximum value", "value": 'max'},
                      {"label": "standard deviation value", "value": 'std'}],
-                value='mean',
-                #placeholder="Select the stats")],
-        
+                value='mean',       
              style={'width': '30%', 'display': 'inline-block'}),
 
-        html.Div([
-            html.H4("Health :", style={'text-align': 'center'}),
-            dcc.RadioItems(
-                id='crossfilter-yaxis-type',
-                options=[{'label': i, 'value': i} for i in ['COVID-19 deaths', 'COVID-19 cases', 'COVID-19 hotspots']],
-                value='COVID-19 deaths',
-                labelStyle={'display': 'inline-block'}
-            )], style={'width': '22%', 'float': 'right', 'display': 'inline-block'}),
+    #    html.Div([
+    #        html.H4("Health :", style={'text-align': 'center'}),
+    #        dcc.RadioItems(
+    #            id='crossfilter-yaxis-type',
+    #            options=[{'label': i, 'value': i} for i in ['COVID-19 deaths', 'COVID-19 cases', 'COVID-19 hotspots']],
+    #            value='COVID-19 deaths',
+    #            labelStyle={'display': 'inline-block'}
+    #        )], style={'width': '22%', 'float': 'right', 'display': 'inline-block'}),
        
-        html.Div([
-            html.H4("Environment :", style={'text-align': 'center'}),
-            dcc.RadioItems(
-                id='Environment',
-                options=[{'label': i, 'value': i} for i in ['Air pollution', 'wheather', 'land use']],
-                value='Air pollution',
-                labelStyle={'display': 'inline-block'})
-            ], style={'width': '22%', 'float': 'right', 'display': 'inline-block'}),
+    #    html.Div([
+    #        html.H4("Environment :", style={'text-align': 'center'}),
+    #        dcc.RadioItems(
+    #            id='Environment',
+    #            options=[{'label': i, 'value': i} for i in ['Air pollution', 'wheather', 'land use']],
+    #            value='Air pollution',
+    #            labelStyle={'display': 'inline-block'})
+    #        ], style={'width': '22%', 'float': 'right', 'display': 'inline-block'}),
         
-        html.Div([
-            html.H4("Population :", style={'text-align': 'center'}),
-            dcc.RadioItems(
-                id='Population',
-                options=[{'label': i, 'value': i} for i in ['Demography', 'Socio economic', 'Density']],
-                value='Demography',
-                labelStyle={'display': 'inline-block'})
-            ], style={'width': '22%', 'float': 'right', 'display': 'inline-block'})
+    #    html.Div([
+    #        html.H4("Population :", style={'text-align': 'center'}),
+    #        dcc.RadioItems(
+    #            id='Population',
+    #            options=[{'label': i, 'value': i} for i in ['Demography', 'Socio economic', 'Density']],
+    #            value='Demography',
+    #            labelStyle={'display': 'inline-block'})
+    #        ], style={'width': '22%', 'float': 'right', 'display': 'inline-block'})
         
         ], style={
             'borderBottom': 'thin lightgrey solid',
             'backgroundColor': 'rgb(250, 250, 250)',
             'padding': '10px 5px'
         }),
-
+        
         html.Div([
-        dcc.Graph(id='pollution_map', style={"height": 700}, figure={})
+        dcc.Graph(id='pollution_map', style={"height": 600, "width" : '100%', 'margin':'0 auto', 'background-color': 'rgba(0,0,0,0)'},
+        figure=fig,
+        hoverData={'points':[{'location': 'Breux'}]})
         ]),
         
         html.Div(dcc.Slider(
@@ -145,7 +140,7 @@ app.layout = html.Div(
             9: 'September',
             10: 'October',
             11: 'November',
-            12: 'December'}), style={'width': '100%', 'padding': '0px 20px 20px 20px'}),
+            12: 'December'}), style={'width': '90%', 'margin': '0 auto', 'padding': '0px 20px 20px 20px', 'background-color': 'rgba(0,0,0,0)'}),
 
         html.Div([
             dcc.Graph(id='poll-time-series'),
@@ -154,9 +149,6 @@ app.layout = html.Div(
         html.Div([
             dcc.Graph(id='COVID-time-series'),
             ], style={'display': 'inline-block', 'width': '49%'}),])])
-
-
-gdf = pd.read_excel('./data/fileToLoad/allData.xlsx')
 
 @app.callback(
 [Output(component_id='pollution_map', component_property='figure')],
@@ -169,8 +161,6 @@ Input(component_id='stats', component_property='value')]
 )
 def update_graph(reg, poll, nut, y, m, s):
     #gdf = pd.read_excel(('./data/processedData/{}_{}_{}_{}_{}.xlsx').format(reg, poll, nut, y, m))
-    start1 = time.time()
-
     with open("./data/geojsonFiles/geojson_{}_{}".format(reg, nut)) as geofile:
         geojson_layer = json.load(geofile)
     for feature in geojson_layer['features']:
@@ -181,8 +171,6 @@ def update_graph(reg, poll, nut, y, m, s):
     df = df[df["nuts"] == nut]
     df = df[df["month"] == m]
     df = df[df["polluant"] == poll]
-    done1 = time.time()
-
     fig = px.choropleth_mapbox(df, geojson=geojson_layer, locations='id', color = s,
                            mapbox_style="open-street-map",
                            zoom=6, center = {"lat": 49.611621, "lon": 6.1319346},
@@ -190,32 +178,31 @@ def update_graph(reg, poll, nut, y, m, s):
                            range_color = [0, 0.000150],
                            labels={s:('{} {} value (mol/m²)').format(poll, s)}
                           )
-    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.01),
+    plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
 
-    done2 = time.time()
-    print (done2-done1, done1-start1)
     return [fig]
     
 def create_time_series(dff, title, poll, stat):
-    fig = px.scatter(dff, x='date', y='{}'.format(stat))
+    fig = px.scatter(dff, x='date', y='{}'.format(stat), height= 400)
     fig.update_traces(mode='lines+markers')
     fig.update_xaxes(showgrid=False)
     fig.update_yaxes(type='linear')
     fig.add_annotation(x=0, y=0.85, xanchor='left', yanchor='bottom',
                        xref='paper', yref='paper', showarrow=False, align='left',
                        bgcolor='rgba(255, 255, 255, 0.5)', text=title)
-    fig.update_layout(height=225, margin={'l': 20, 'b': 30, 'r': 10, 't': 10})
+    fig.update_layout(height=225, margin={'l': 20, 'b': 30, 'r': 10, 't': 10}, plot_bgcolor='rgba(0,0,0,0)')
     return [fig]
 
 def create_COVID_time_series(dff, title):
-    fig = px.scatter(dff, x='date', y='COVID Cases')
+    fig = px.scatter(dff, x='date', y='COVID Cases', height= 400)
     fig.update_traces(mode='lines+markers')
     fig.update_xaxes(showgrid=False)
     fig.update_yaxes(type='linear')
     fig.add_annotation(x=0, y=0.85, xanchor='left', yanchor='bottom',
                        xref='paper', yref='paper', showarrow=False, align='left',
                        bgcolor='rgba(255, 255, 255, 0.5)', text=title)
-    fig.update_layout(height=225, margin={'l': 20, 'b': 30, 'r': 10, 't': 10})
+    fig.update_layout(height=225, margin={'l': 20, 'b': 30, 'r': 10, 't': 10}, plot_bgcolor='rgba(0,0,0,0)')
     return [fig]
 
 
@@ -234,7 +221,7 @@ def update_poll_timeseries(hoverData, poll, stat):
 @app.callback(
     [Output('COVID-time-series', 'figure')],
     [Input('pollution_map', 'hoverData')])
-def update_poll_timeseries(hoverData):
+def update_covid_timeseries(hoverData):
     country_name = hoverData['points'][0]['location']
     dff = gdf[gdf['id'] == country_name]
     title = '<b>{} COVID Cases data</b>'.format(country_name)

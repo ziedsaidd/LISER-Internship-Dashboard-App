@@ -58,6 +58,22 @@ def generate_dataframe(shapefile, raster):
     districts ["nuts"] = nuts
     districts ["zone"] = reg
     del districts["geometry"]
+    try:
+        del districts["perimeter"]
+        del districts["area"]
+        del districts["moc"]
+        del districts["icc"]
+        del districts["hl2"]
+        del districts["hl3"]
+        del districts["hl4"]
+        del districts["hl5"]
+        del districts["hl6"]
+        del districts["insee"]
+        del districts["rau"]
+        del districts["use"]
+        del districts["eur"]
+        del districts["isn"]
+        del districts["shn_txt"]
 
     return districts, geojson_layer
 
@@ -120,6 +136,7 @@ def create_csvs(path):
                                                 path, zone, p, tif))
                                         dataframe['year'] = int(year)
                                         dataframe['month'] = int(month)
+                                        dataframe['date'] = '{}/{}'.format(month, year)
                                         dataframe['polluant'] = p
                                         dataframe.to_excel((
                                             './data/processedData/{}_{}_nuts1_{}_{}.xlsx'
@@ -136,6 +153,7 @@ def create_csvs(path):
                                                 path, zone, p, tif))
                                         dataframe['year'] = int(year)
                                         dataframe['month'] = int(month)
+                                        dataframe['date'] = '{}/{}'.format(month, year)
                                         dataframe['polluant'] = p
                                         dataframe.to_excel((
                                             './data/processedData/{}_{}_nuts2_{}_{}.xlsx'
@@ -152,6 +170,7 @@ def create_csvs(path):
                                                 path, zone, p, tif))
                                         dataframe['year'] = int(year)
                                         dataframe['month'] = int(month)
+                                        dataframe['date'] = '{}/{}'.format(month, year)
                                         dataframe['polluant'] = p
                                         dataframe.to_excel((
                                             './data/processedData/{}_{}_nuts3_{}_{}.xlsx'
@@ -207,6 +226,7 @@ def generate_from_countries(path, zone):
                                         path, zone, p, tif))
                             dataframe['year'] = int(year)
                             dataframe['month'] = int(month)
+                            dataframe['date'] = '{}/{}'.format(month, year)
                             dataframe['polluant'] = p
                             dataframe.to_excel(
                                 ('./data/processedData/{}_{}_nuts1_{}_{}.xlsx'
@@ -223,6 +243,7 @@ def generate_from_countries(path, zone):
                                         path, zone, p, tif))
                             dataframe['year'] = int(year)
                             dataframe['month'] = int(month)
+                            dataframe['date'] = '{}/{}'.format(month, year)
                             dataframe['polluant'] = p
                             dataframe.to_excel(
                                 ('./data/processedData/{}_{}_nuts2_{}_{}.xlsx'
@@ -239,6 +260,7 @@ def generate_from_countries(path, zone):
                                         path, zone, p, tif))
                             dataframe['year'] = int(year)
                             dataframe['month'] = int(month)
+                            dataframe['date'] = '{}/{}'.format(month, year)
                             dataframe['polluant'] = p
                             dataframe.to_excel(
                                 ('./data/processedData/{}_{}_nuts3_{}_{}.xlsx'
@@ -272,6 +294,7 @@ def generate_from_polluant(path, zone, polluant):
                                     path, zone, polluant, tif))
                         dataframe['year'] = int(year)
                         dataframe['month'] = int(month)
+                        dataframe['date'] = '{}/{}'.format(month, year)
                         dataframe['polluant'] = polluant
                         dataframe.to_excel(
                             ('./data/processedData/{}_{}_nuts1_{}_{}.xlsx'
@@ -288,6 +311,7 @@ def generate_from_polluant(path, zone, polluant):
                                     path, zone, polluant, tif))
                         dataframe['year'] = int(year)
                         dataframe['month'] = int(month)
+                        dataframe['date'] = '{}/{}'.format(month, year)
                         dataframe['polluant'] = polluant
                         dataframe.to_excel(
                             ('./data/processedData/{}_{}_nuts2_{}_{}.xlsx'
@@ -304,6 +328,7 @@ def generate_from_polluant(path, zone, polluant):
                                     path, zone, polluant, tif))
                         dataframe['year'] = int(year)
                         dataframe['month'] = int(month)
+                        dataframe['date'] = '{}/{}'.format(month, year)
                         dataframe['polluant'] = polluant
                         dataframe.to_excel(
                             ('./data/processedData/{}_{}_nuts3_{}_{}.xlsx'
@@ -337,6 +362,7 @@ def generate_from_nuts(n, path, zone, nutfile):
                     print("enaltheleth")
                     dataframe['year'] = int(year)
                     dataframe['month'] = int(month)
+                    dataframe['date'] = '{}/{}'.format(month, year)
                     dataframe['polluant'] = p
                     dataframe.to_excel(
                         ('./data/processedData/{}_{}_{}_{}_{}.xlsx').format(
@@ -366,6 +392,7 @@ def generate_from_tif(path, zone, p, tif):
                     ('{}/{}/polluant/{}/{}').format(path, zone, p, tif))
                 dataframe['year'] = int(year)
                 dataframe['month'] = int(month)
+                dataframe['date'] = '{}/{}'.format(month, year)
                 dataframe['polluant'] = p
                 dataframe.to_excel(
                     ('./data/processedData/{}_{}_nuts1_{}_{}.xlsx').format(
@@ -380,6 +407,7 @@ def generate_from_tif(path, zone, p, tif):
                     ('{}/{}/polluant/{}/{}').format(path, zone, p, tif))
                 dataframe['year'] = int(year)
                 dataframe['month'] = int(month)
+                dataframe['date'] = '{}/{}'.format(month, year)
                 dataframe['polluant'] = p
                 dataframe.to_excel(
                     ('./data/processedData/{}_{}_nuts2_{}_{}.xlsx').format(
@@ -394,6 +422,7 @@ def generate_from_tif(path, zone, p, tif):
                     ('{}/{}/polluant/{}/{}').format(path, zone, p, tif))
                 dataframe['year'] = int(year)
                 dataframe['month'] = int(month)
+                dataframe['date'] = '{}/{}'.format(month, year)
                 dataframe['polluant'] = p
                 dataframe.to_excel(
                     ('./data/processedData/{}_{}_nuts3_{}_{}.xlsx').format(
@@ -642,6 +671,7 @@ def createBigFile (path):
             #        df2 = df2.append(pd.read_excel("./data/processedData/{}".format(file)), ignore_index=True)
             #    elif "nuts3" in file:
             #        df3 = df3.append(pd.read_excel("./data/processedData/{}".format(file)), ignore_index=True)
+    df1.sort_values(by=['date'])
     if df1.empty == 0:
         df1.to_excel("./data/fileToLoad/allData.xlsx")
     #if df2.empty == 0:

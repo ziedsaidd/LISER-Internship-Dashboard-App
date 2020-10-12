@@ -3,7 +3,7 @@ body{
 	padding: 0;
 	background-color: #e5e8e6;
 	font-family: 'Open Sans', sans-serif;
-	color: #506784;
+	color: #ffffff;
     -webkit-user-select: none;  /* Chrome all / Safari all */
     -moz-user-select: none;     /* Firefox all */
     -ms-user-select: none;      /* IE 10+ */
@@ -27,7 +27,7 @@ body{
     margin: 5% auto; /* 15% from the top and centered */
     padding: 20px;
     width: 50%; /* Could be more or less, depending on screen size */
-    color:#506784;
+    color:#ffffff;
 }
 ._dash-undo-redo {
   display: none;
