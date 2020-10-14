@@ -161,7 +161,7 @@ Input(component_id='stats', component_property='value')]
 )
 def update_graph(reg, poll, nut, y, m, s):
     #gdf = pd.read_excel(('./data/processedData/{}_{}_{}_{}_{}.xlsx').format(reg, poll, nut, y, m))
-    with open("./data/geojsonFiles/geojson_{}_{}".format(reg, nut)) as geofile:
+    with open("./data/geojsonFiles/geojson_{}_{}".format(reg, nut), encoding='latin-1') as geofile:
         geojson_layer = json.load(geofile)
     for feature in geojson_layer['features']:
         feature['id'] = feature['properties']['GEN']
@@ -229,5 +229,6 @@ def update_covid_timeseries(hoverData):
 
 
 if __name__ == '__main__':
-    app.server.run(debug=True)
-    #app.run_server(debug=True)
+    #server.run(debug=True)
+    app.run_server(debug=True)
+    #server.run(host = "0.0.0.0", port= 5000)
