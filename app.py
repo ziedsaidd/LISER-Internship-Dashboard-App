@@ -16,7 +16,6 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 import json
 import time
-from flask_caching import Cache
 #Read the data file processed by dataProcessing.py
 gdf = pd.read_excel('./data/fileToLoad/allData.xlsx')
 # App layout
@@ -121,7 +120,7 @@ app.layout = html.Div(
         
         html.Div([
         dcc.Graph(id='pollution_map', style={"height": 600, "width" : '100%', 'margin':'0 auto', 'background-color': 'rgba(0,0,0,0)'},
-        figure=fig,
+        figure={},
         hoverData={'points':[{'location': 'Breux'}]})
         ]),
         
