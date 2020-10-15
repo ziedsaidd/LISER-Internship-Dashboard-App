@@ -18,8 +18,6 @@ import json
 import time
 #Read the data file processed by dataProcessing.py
 gdf = pd.read_excel('./data/fileToLoad/allData.xlsx')
-with open("./data/geojsonFiles/geojson_greaterRegion_nuts3", encoding='latin-1') as geofile:
-    geojson_layer = json.load(geofile)
 # App layout
 fig = px.choropleth_mapbox(mapbox_style="open-street-map",center = {"lat": 49.611621, "lon": 6.1319346})
 #
@@ -163,8 +161,8 @@ Input(component_id='stats', component_property='value')]
 )
 def update_graph(reg, poll, nut, y, m, s):
     #gdf = pd.read_excel(('./data/processedData/{}_{}_{}_{}_{}.xlsx').format(reg, poll, nut, y, m))
-    #with open("./data/geojsonFiles/geojson_{}_{}".format(reg, nut), encoding='latin-1') as geofile:
-    #    geojson_layer = json.load(geofile)
+    with open("./data/geojsonFiles/geojson_{}_{}".format(reg, nut), encoding='latin-1') as geofile:
+        geojson_layer = json.load(geofile)
     for feature in geojson_layer['features']:
         feature['id'] = feature['properties']['GEN']
     df = gdf.copy()
