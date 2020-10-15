@@ -14,6 +14,12 @@ def generate_dataframe(shapefile, raster):
     e = s[6].split("_")
     nuts = e[1].split(".")[0]
     reg = e[0]
+    #exclusive for europe shapefile
+    try:
+        districts["GEN"]=districts["NAME"]
+        districts["SHN"]=districts["NUTS"]
+    except:
+        pass
  #  districts.drop(["GEN"], axis=1)
  #  districts["GEN"]= districts["POPULATION"]
     districts = districts.to_crs('epsg:4326')

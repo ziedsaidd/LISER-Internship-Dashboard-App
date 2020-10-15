@@ -181,7 +181,6 @@ def update_graph(reg, poll, nut, y, m, s):
                           )
     fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.01),
     plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
-
     return [fig]
     
 def create_time_series(dff, title, poll, stat):
