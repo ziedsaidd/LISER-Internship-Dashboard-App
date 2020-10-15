@@ -18,6 +18,8 @@ import json
 import time
 #Read the data file processed by dataProcessing.py
 gdf = pd.read_excel('./data/fileToLoad/allData.xlsx')
+with open("./data/geojsonFiles/geojson_greaterRegion_nuts3", encoding='latin-1') as geofile:
+    geojson_layer = json.load(geofile)
 # App layout
 fig = px.choropleth_mapbox(mapbox_style="open-street-map",center = {"lat": 49.611621, "lon": 6.1319346})
 #
@@ -150,6 +152,38 @@ app.layout = html.Div(
             dcc.Graph(id='COVID-time-series'),
             ], style={'display': 'inline-block', 'width': '49%', 'margin': '0 auto'}),])])
 
+@app.callback(
+[Output(component_id='pollution_map', component_property='figure')],
+[Input(component_id='Country', component_property='value'),
+Input(component_id='Polluant', component_property='value'),
+Input(component_id='Nuts', component_property='value'),
+Input(component_id='Year', component_property='value'),
+Input(component_id='month_selector', component_property='value'),
+Input(component_id='stats', component_property='value')]
+)
+def update_graph(reg, poll, nut, y, m, s):
+    #gdf = pd.read_excel(('./data/processedData/{}_{}_{}_{}_{}.xlsx').format(reg, poll, nut, y, m))
+    #with open("./data/geojsonFiles/geojson_{}_{}".format(reg, nut), encoding='latin-1') as geofile:
+    #    geojson_layer = json.load(geofile)
+    for feature in geojson_layer['features']:
+        feature['id'] = feature['properties']['GEN']
+    df = gdf.copy()
+    df = df[df["zone"] == reg]
+    df = df[df["year"] == y]
+    df = df[df["nuts"] == nut]
+    df = df[df["month"] == m]
+    df = df[df["polluant"] == poll]
+    fig = px.choropleth_mapbox(df, geojson=geojson_layer, locations='id', color = s,
+                           mapbox_style="open-street-map",
+                           zoom=6, center = {"lat": 49.611621, "lon": 6.1319346},
+                           opacity=0.5,
+                           range_color = [0, 0.000150],
+                           labels={s:('{} {} value (mol/m²)').format(poll, s)}
+                          )
+    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.01),
+    plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+
+    return [fig]
     
 def create_time_series(dff, title, poll, stat):
     fig = px.scatter(dff, x='date', y='{}'.format(stat), height= 400)
