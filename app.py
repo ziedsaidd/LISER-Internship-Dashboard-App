@@ -16,12 +16,14 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 import json
 import time
+from flask_caching import Cache
 #Read the data file processed by dataProcessing.py
 gdf = pd.read_excel('./data/fileToLoad/allData.xlsx')
 # App layout
-fig = px.choropleth_mapbox(mapbox_style="open-street-map",center = {"lat": 49.611621, "lon": 6.1319346})
+#fig = px.choropleth_mapbox(mapbox_style="open-street-map",center = {"lat": 49.611621, "lon": 6.1319346})
 #
 app = dash.Dash(__name__)
+
 server = app.server
 app.layout = html.Div(
         [
@@ -165,8 +167,7 @@ def update_graph(reg, poll, nut, y, m, s):
         geojson_layer = json.load(geofile)
     for feature in geojson_layer['features']:
         feature['id'] = feature['properties']['GEN']
-    df = gdf.copy()
-    df = df[df["zone"] == reg]
+    df = gdf[gdf["zone"] == reg]
     df = df[df["year"] == y]
     df = df[df["nuts"] == nut]
     df = df[df["month"] == m]

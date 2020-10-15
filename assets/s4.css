@@ -3,7 +3,7 @@ body{
     padding: 0;
     background-color: #e5e8e6;
     font-family: 'Open Sans', sans-serif;
-    color: #ffffff;
+    color: #506784;
     -webkit-user-select: none;  /* Chrome all / Safari all */
     -moz-user-select: none;     /* Firefox all */
     -ms-user-select: none;      /* IE 10+ */
@@ -27,7 +27,7 @@ body{
     margin: 5% auto; /* 15% from the top and centered */
     padding: 20px;
     width: 50%; /* Could be more or less, depending on screen size */
-    color:#ffffff;
+    color:#506784;
 }
 ._dash-undo-redo {
   display: none;
@@ -50,7 +50,7 @@ body{
 }
 
 .indicator{
-    border:1px solid #ffffff;
+    border:1px solid #C8D4E3;
     border-radius: 3px;
     background-color: white;
     height:100px;
@@ -86,7 +86,7 @@ body{
 
 
 .chart_div p{
-    color: #ffffff;
+    color: #2a3f5f;
     font-size: 13px;
     text-align: center;   
 }
