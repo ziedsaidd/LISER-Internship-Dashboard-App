@@ -162,7 +162,7 @@ Input(component_id='stats', component_property='value')]
 )
 def update_graph(reg, poll, nut, y, m, s):
     #gdf = pd.read_excel(('./data/processedData/{}_{}_{}_{}_{}.xlsx').format(reg, poll, nut, y, m))
-    with open("./data/geojsonFiles/geojson_{}_{}".format(reg, nut), encoding='latin-1') as geofile:
+    with open("./data/geojsonFiles/geojson_{}_{}".format(reg, nut), encoding='utf-8') as geofile:
         geojson_layer = json.load(geofile)
     for feature in geojson_layer['features']:
         feature['id'] = feature['properties']['GEN']

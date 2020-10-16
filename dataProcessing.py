@@ -6,6 +6,7 @@ import pandas as pd
 import rasterio
 import rasterstats
 import time
+import random 
 
 def generate_dataframe(shapefile, raster):   
     # Read the shapefile and convert its crs
@@ -24,8 +25,8 @@ def generate_dataframe(shapefile, raster):
  #  districts["GEN"]= districts["POPULATION"]
     districts = districts.to_crs('epsg:4326')
     # convert it into a geoJson file
-    districts.to_file("./data/geojsonFiles/geojson_{}_{}".format(reg, nuts), driver="GeoJSON")
-    with open("./data/geojsonFiles/geojson_{}_{}".format(reg, nuts)) as geofile:   
+    districts.to_file("./data/geojsonFiles/geojson_{}_{}".format(reg, nuts), driver="GeoJSON", encoding="utf-8")
+    with open("./data/geojsonFiles/geojson_{}_{}".format(reg, nuts), encoding="utf-8") as geofile:   
         geojson_layer = json.load(geofile)
     # concordance between the df and the geojson file based on an 'id' key
     state_id_map = {}
@@ -63,28 +64,10 @@ def generate_dataframe(shapefile, raster):
     districts["std"] = avg_pl_gr["std"]
     districts ["nuts"] = nuts
     districts ["zone"] = reg
-    try:
-        del districts["geometry"]
-    except:
-        pass
-    try:
-        del districts["perimeter"]
-        del districts["area"]
-        del districts["moc"]
-        del districts["icc"]
-        del districts["hl2"]
-        del districts["hl3"]
-        del districts["hl4"]
-        del districts["hl5"]
-        del districts["hl6"]
-        del districts["insee"]
-        del districts["rau"]
-        del districts["use"]
-        del districts["eur"]
-        del districts["isn"]
-        del districts["shn_txt"]
-    except:
-        pass
+    districts ["COVID Cases"] = random.randint(10000,30000)
+    
+    keep = ["SHN", "GEN", "mean", "min", "max", "std", "nuts", "zone", "id", "COVID Cases"]
+    districts = districts[[c for c in districts.columns if c in keep]]
 
     return districts, geojson_layer
 
@@ -355,7 +338,6 @@ def generate_from_nuts(n, path, zone, nutfile):
         if ".xlsx" not in p:
             ppath = os.path.join(('{}/{}/polluant/').format(path, zone), p)
             pelement = os.listdir(ppath)
-            print("ena louwel")
             for tif in pelement:
                 if ".xlsx" not in tif:
                     part = tif.split("_")
@@ -364,13 +346,11 @@ def generate_from_nuts(n, path, zone, nutfile):
                     month = month.split(".")
                     month = month[0]
                     month = str(int(month))
-                    print("enaltheniiiih")
                     #try:
                     dataframe, jsonfile = generate_dataframe(
                         ('{}/{}/shapefiles/{}/{}').format(
                             path, zone, n, nutfile),
                         ('{}/{}/polluant/{}/{}').format(path, zone, p, tif))
-                    print("enaltheleth")
                     dataframe['year'] = int(year)
                     dataframe['month'] = int(month)
                     dataframe['date'] = '{}/{}'.format(month, year)
