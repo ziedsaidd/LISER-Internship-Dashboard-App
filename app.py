@@ -22,7 +22,6 @@ gdf = pd.read_excel('./data/fileToLoad/allData.xlsx')
 #fig = px.choropleth_mapbox(mapbox_style="open-street-map",center = {"lat": 49.611621, "lon": 6.1319346})
 #
 app = dash.Dash(__name__)
-
 server = app.server
 app.layout = html.Div(
         [
@@ -228,6 +227,6 @@ def update_covid_timeseries(hoverData):
 
 
 if __name__ == '__main__':
-    server.run(debug=True)
+    #server.run(debug=True)
     #app.run_server(debug=True)
-    #server.run(host = "0.0.0.0", port= 5000)
+    server.run(host = "0.0.0.0")
