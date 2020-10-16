@@ -228,5 +228,5 @@ def update_covid_timeseries(hoverData):
 
 if __name__ == '__main__':
     #server.run(debug=True)
-    #app.run_server(debug=True)
-    server.run(host = "0.0.0.0")
+    app.run_server(debug=True)
+    #server.run(host = "0.0.0.0", port= 5000)
