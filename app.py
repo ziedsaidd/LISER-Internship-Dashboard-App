@@ -63,7 +63,7 @@ app.layout = html.Div(
                      {"label": "Nation", "value": 'nuts1'},
                      {"label": "Region", "value": 'nuts2'},
                      {"label": "Departement", "value": 'nuts3'}],
-                value='nuts3',
+                value='nuts1',
             ),
             dcc.Dropdown(
                 id='Year',
@@ -125,7 +125,7 @@ app.layout = html.Div(
             id='month_selector',
             min=1,
             max=12,
-            value=1,
+            value=2,
             marks={
             1: 'January',
             2: 'February',
