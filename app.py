@@ -19,8 +19,6 @@ import time
 #Read the data file processed by dataProcessing.py
 gdf = pd.read_excel('./data/fileToLoad/allData.xlsx')
 # App layout
-#fig = px.choropleth_mapbox(mapbox_style="open-street-map",center = {"lat": 49.611621, "lon": 6.1319346})
-#
 app = dash.Dash(__name__)
 server = app.server
 app.layout = html.Div(
