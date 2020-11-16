@@ -60,9 +60,7 @@ Contributions are what make the open source community such an amazing place to b
 
 
 
-<!-- LICENSE -->
-## License
-This project is still not liscenced 
+
 
 <!-- CONTACT -->
 
